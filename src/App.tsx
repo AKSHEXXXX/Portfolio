@@ -139,7 +139,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="hero-word inline-block uppercase text-dotted"
+                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.94em] md:text-[0.9em]"
               >
                 DEDICATION
               </motion.span>
