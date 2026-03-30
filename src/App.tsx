@@ -121,7 +121,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="inline-block tracking-tighter text-white"
+                className="hero-word inline-block text-white"
               >
                 PRECISION
               </motion.span>
@@ -139,7 +139,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="inline-block uppercase tracking-tighter text-dotted"
+                className="hero-word inline-block uppercase text-dotted"
               >
                 DEDICATION
               </motion.span>
@@ -435,4 +435,3 @@ function SocialLink({ href, label }: { href: string, label: string }) {
     </a>
   );
 }
-

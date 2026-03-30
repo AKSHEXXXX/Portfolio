@@ -72,6 +72,12 @@
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
 }
 
+.hero-word {
+  letter-spacing: -0.07em;
+  transform: scaleX(0.94);
+  transform-origin: center;
+}
+
 .glass {
   @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
 }
