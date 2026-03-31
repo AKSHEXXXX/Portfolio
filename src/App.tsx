@@ -396,6 +396,13 @@ export default function App() {
                 href="https://www.linkedin.com/in/akshat-saxena-457b4b229/"
                 icon={<Linkedin size={48} />}
               />
+              <div className="flex justify-center pt-10">
+                <div className="rounded-full border border-[#E07A3E]/50 bg-[#E07A3E]/12 px-6 py-3 text-center shadow-[0_0_30px_rgba(224,122,62,0.18)] backdrop-blur-sm">
+                  <span className="font-accent-mono text-xs uppercase tracking-[0.35em] text-[#FFD3BA]">
+                    You&apos;re The {visitorCount}th Visitor
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -404,7 +411,6 @@ export default function App() {
         <footer className="p-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-mono uppercase tracking-widest text-text/40">
           <div>Local Time: {localTime}</div>
           <div>Location: Planet Earth</div>
-          <div>You&apos;re the {visitorCount}th visitor</div>
           <div>© 2026 Akshat. All rights reserved.</div>
         </footer>
       </div>
