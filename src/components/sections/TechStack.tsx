@@ -44,6 +44,13 @@ const JavaScriptIcon = ({ size = 22 }: { size?: number }) => (
   </svg>
 );
 
+const TailwindIcon = ({ size = 22 }: { size?: number }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 7.5C10.1 7.5 8.9 8.4 8.4 10.2C9.1 9.3 9.9 9 10.9 9.3C11.5 9.5 11.9 10 12.3 10.5C12.9 11.3 13.6 12.2 15.6 12.2C17.5 12.2 18.7 11.3 19.2 9.5C18.5 10.4 17.7 10.7 16.7 10.4C16.1 10.2 15.7 9.7 15.3 9.2C14.7 8.4 14 7.5 12 7.5Z" fill="#38BDF8"/>
+    <path d="M8.4 12.2C6.5 12.2 5.3 13.1 4.8 14.9C5.5 14 6.3 13.7 7.3 14C7.9 14.2 8.3 14.7 8.7 15.2C9.3 16 10 16.9 12 16.9C13.9 16.9 15.1 16 15.6 14.2C14.9 15.1 14.1 15.4 13.1 15.1C12.5 14.9 12.1 14.4 11.7 13.9C11.1 13.1 10.4 12.2 8.4 12.2Z" fill="#38BDF8"/>
+  </svg>
+);
+
 const SpringIcon = ({ size = 22 }: { size?: number }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M19 6C14.2 6 9.6 8.5 7 12.5C8.8 12.1 10.8 12.3 12.4 13.3C14.8 14.8 16.1 17.3 16 20C19.7 17.6 22 12.2 22 7.6V6H19Z" fill="#6DB33F"/>
@@ -192,6 +199,7 @@ const TECH_CATEGORIES: TechCategory[] = [
       { name: "Java", icon: <JavaIcon /> },
       { name: "Python", icon: <PythonIcon /> },
       { name: "JavaScript", icon: <JavaScriptIcon /> },
+      { name: "Tailwind CSS", icon: <TailwindIcon /> },
     ],
   },
   {
