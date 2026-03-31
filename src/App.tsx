@@ -7,15 +7,69 @@ import CustomCursor from "./components/CustomCursor";
 import TechStack from "./components/sections/TechStack";
 import Lenis from "lenis";
 
+const VISITOR_COUNTER_KEY = "akshat-portfolio-visitor-count";
+
+function formatLocalTimestamp(now: Date, highResMs: number) {
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const microseconds = String(
+    now.getMilliseconds() * 1000 + Math.floor((highResMs % 1) * 1000)
+  ).padStart(6, "0");
+
+  return `${hours}:${minutes}:${seconds}.${microseconds}`;
+}
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [titleIndex, setTitleIndex] = useState(0);
+  const [isMobileExperience, setIsMobileExperience] = useState(false);
+  const [localTime, setLocalTime] = useState(() =>
+    formatLocalTimestamp(new Date(), performance.now())
+  );
+  const [visitorCount, setVisitorCount] = useState(199);
   const titles = ["Full Stack Developer", "ML Engineer"];
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+    );
+
+    const updateExperienceMode = () => {
+      setIsMobileExperience(mediaQuery.matches);
+    };
+
+    updateExperienceMode();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateExperienceMode);
+
+      return () => {
+        mediaQuery.removeEventListener("change", updateExperienceMode);
+      };
+    }
+
+    mediaQuery.addListener(updateExperienceMode);
+
+    return () => {
+      mediaQuery.removeListener(updateExperienceMode);
+    };
+  }, []);
 
   useEffect(() => {
     const titleInterval = setInterval(() => {
       setTitleIndex((prev) => (prev + 1) % titles.length);
     }, 3000);
+
+    return () => {
+      clearInterval(titleInterval);
+    };
+  }, [titles.length]);
+
+  useEffect(() => {
+    if (isMobileExperience) {
+      return;
+    }
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -36,9 +90,33 @@ export default function App() {
     requestAnimationFrame(raf);
 
     return () => {
-      clearInterval(titleInterval);
       lenis.destroy();
     };
+  }, [isMobileExperience]);
+
+  useEffect(() => {
+    const updateClock = () => {
+      setLocalTime(formatLocalTimestamp(new Date(), performance.now()));
+    };
+
+    updateClock();
+    const intervalId = window.setInterval(updateClock, 50);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedCount = Number(window.localStorage.getItem(VISITOR_COUNTER_KEY) ?? "199");
+    const nextCount = Number.isFinite(storedCount) && storedCount >= 199 ? storedCount + 1 : 200;
+
+    window.localStorage.setItem(VISITOR_COUNTER_KEY, String(nextCount));
+    setVisitorCount(nextCount);
   }, []);
 
   return (
@@ -49,7 +127,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <WebGLBackground />
+      <WebGLBackground mobileOptimized={isMobileExperience} />
       <div 
         className="min-h-screen selection:bg-accent selection:text-white grid-bg relative overflow-x-hidden"
         style={{ opacity: isLoading ? 0 : 1, transition: "opacity 0.5s ease-out" }}
@@ -58,18 +136,18 @@ export default function App() {
         <div className="noise-bg" />
 
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference">
+        <nav className="fixed top-0 left-0 z-50 flex w-full items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 md:px-10 mix-blend-difference">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-xl font-display font-bold tracking-tighter"
+            className="shrink-0 pr-4 text-lg font-display font-bold tracking-tighter sm:pr-8 sm:text-xl md:pr-12"
           >
             AKSHAT<span className="text-accent">.</span>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex gap-8 text-sm font-mono uppercase tracking-widest"
+            className="ml-auto flex gap-4 text-xs font-mono uppercase tracking-[0.28em] sm:gap-7 sm:text-sm sm:tracking-widest"
           >
             <a href="#about" className="hover:text-accent transition-colors">About</a>
             <a href="#projects" className="hover:text-accent transition-colors">Work</a>
@@ -78,7 +156,7 @@ export default function App() {
         </nav>
 
         {/* Hero Section */}
-        <section className="h-screen flex flex-col justify-center px-6 md:px-20 relative overflow-hidden">
+        <section className="h-screen flex flex-col justify-center px-3 sm:px-6 md:px-20 relative overflow-hidden">
           
           <motion.div
             initial="hidden"
@@ -115,7 +193,7 @@ export default function App() {
                 </motion.span>
               </AnimatePresence>
             </motion.h2>
-            <h1 className="text-6xl md:text-[10rem] font-display font-bold leading-[0.75] mb-8 flex flex-col items-center">
+            <h1 className="mb-8 flex w-full max-w-[94vw] flex-col items-center text-center font-display text-[clamp(2.45rem,11.5vw,4.8rem)] font-bold leading-[0.82] md:max-w-none md:text-[10rem] md:leading-[0.75]">
               <motion.span 
                 variants={{
                   hidden: { opacity: 0, y: 20 },
@@ -130,7 +208,7 @@ export default function App() {
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="font-artistic-serif italic lowercase text-5xl md:text-[8rem] text-[#E07A3E] my-[-0.25em] relative z-10"
+                className="relative z-10 my-[-0.12em] font-artistic-serif text-[clamp(1.85rem,8vw,3.8rem)] italic lowercase text-[#E07A3E] md:my-[-0.25em] md:text-[8rem]"
               >
                 and
               </motion.span>
@@ -139,7 +217,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.94em] md:text-[0.9em]"
+                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.84em] md:text-[0.9em]"
               >
                 DEDICATION
               </motion.span>
@@ -156,7 +234,7 @@ export default function App() {
           </motion.div>
         </section>
 
-        <TechStack />
+        <TechStack mobileOptimized={isMobileExperience} />
 
         {/* Quote Section */}
         <section className="py-40 relative flex justify-center items-center px-6 overflow-hidden">
@@ -318,13 +396,20 @@ export default function App() {
                 href="https://www.linkedin.com/in/akshat-saxena-457b4b229/"
                 icon={<Linkedin size={48} />}
               />
+              <div className="flex justify-center pt-10">
+                <div className="rounded-full border border-[#E07A3E]/50 bg-[#E07A3E]/12 px-6 py-3 text-center shadow-[0_0_30px_rgba(224,122,62,0.18)] backdrop-blur-sm">
+                  <span className="font-accent-mono text-xs uppercase tracking-[0.35em] text-[#FFD3BA]">
+                    You&apos;re The {visitorCount}th Visitor
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Footer */}
         <footer className="p-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-mono uppercase tracking-widest text-text/40">
-          <div>Local Time: {new Date().toLocaleTimeString()}</div>
+          <div>Local Time: {localTime}</div>
           <div>Location: Planet Earth</div>
           <div>© 2026 Akshat. All rights reserved.</div>
         </footer>
@@ -343,7 +428,7 @@ function ProjectRow({ title, category, year, href }: { title: string, category: 
       className="group flex items-center justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
     >
       <div className="flex items-center gap-8">
-        <span className="text-text/20 font-accent-mono text-sm group-hover:text-accent transition-colors">{year}</span>
+        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent">{year}</span>
         <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
       </div>
       <div className="flex items-center gap-4">

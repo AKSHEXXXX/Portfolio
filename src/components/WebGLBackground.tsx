@@ -86,14 +86,17 @@ const FRAGMENT_SHADER = `
   }
 `;
 
-const WebGLBackground: React.FC = () => {
+interface WebGLBackgroundProps {
+  mobileOptimized?: boolean;
+}
+
+const WebGLBackground: React.FC<WebGLBackgroundProps> = ({ mobileOptimized = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    // Detect Safari for fallback
     const ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
+    if (ua.indexOf("safari") !== -1 && ua.indexOf("chrome") === -1) {
       setIsSafari(true);
     }
   }, []);
@@ -184,12 +187,11 @@ const WebGLBackground: React.FC = () => {
     let animationFrameId: number;
     let startTime = Date.now();
     let lastTime = 0;
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const targetFPS = isMobile ? 30 : 60;
+    const targetFPS = mobileOptimized ? 28 : 60;
     const frameInterval = 1000 / targetFPS;
 
     const resize = () => {
-      const dpr = 0.75; // Downscale for performance
+      const dpr = mobileOptimized ? 0.6 : Math.min(window.devicePixelRatio || 1, 1);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -242,13 +244,13 @@ const WebGLBackground: React.FC = () => {
       gl.deleteBuffer(buffer);
       gl.deleteTexture(texture);
     };
-  }, [isSafari]);
+  }, [isSafari, mobileOptimized]);
 
   if (isSafari) {
     return (
       <div 
-        className="fixed inset-0 -z-1 bg-gradient-to-br from-[#000000] via-[#4a1a05] to-[#E07A3E]"
-        style={{ pointerEvents: 'none' }}
+        className="fixed inset-0 -z-1 bg-[radial-gradient(circle_at_top,#6d2a10_0%,#130b08_38%,#050505_78%)]"
+        style={{ pointerEvents: "none" }}
       />
     );
   }
@@ -258,8 +260,8 @@ const WebGLBackground: React.FC = () => {
       ref={canvasRef}
       className="fixed inset-0 -z-1 w-full h-full bg-black"
       style={{ 
-        imageRendering: 'pixelated',
-        pointerEvents: 'none'
+        imageRendering: "pixelated",
+        pointerEvents: "none"
       }}
     />
   );
