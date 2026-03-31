@@ -7,10 +7,27 @@ import CustomCursor from "./components/CustomCursor";
 import TechStack from "./components/sections/TechStack";
 import Lenis from "lenis";
 
+const VISITOR_COUNTER_KEY = "akshat-portfolio-visitor-count";
+
+function formatLocalTimestamp(now: Date, highResMs: number) {
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const microseconds = String(
+    now.getMilliseconds() * 1000 + Math.floor((highResMs % 1) * 1000)
+  ).padStart(6, "0");
+
+  return `${hours}:${minutes}:${seconds}.${microseconds}`;
+}
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [titleIndex, setTitleIndex] = useState(0);
   const [isMobileExperience, setIsMobileExperience] = useState(false);
+  const [localTime, setLocalTime] = useState(() =>
+    formatLocalTimestamp(new Date(), performance.now())
+  );
+  const [visitorCount, setVisitorCount] = useState(199);
   const titles = ["Full Stack Developer", "ML Engineer"];
 
   useEffect(() => {
@@ -76,6 +93,31 @@ export default function App() {
       lenis.destroy();
     };
   }, [isMobileExperience]);
+
+  useEffect(() => {
+    const updateClock = () => {
+      setLocalTime(formatLocalTimestamp(new Date(), performance.now()));
+    };
+
+    updateClock();
+    const intervalId = window.setInterval(updateClock, 50);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedCount = Number(window.localStorage.getItem(VISITOR_COUNTER_KEY) ?? "199");
+    const nextCount = Number.isFinite(storedCount) && storedCount >= 199 ? storedCount + 1 : 200;
+
+    window.localStorage.setItem(VISITOR_COUNTER_KEY, String(nextCount));
+    setVisitorCount(nextCount);
+  }, []);
 
   return (
     <>
@@ -360,8 +402,9 @@ export default function App() {
 
         {/* Footer */}
         <footer className="p-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-mono uppercase tracking-widest text-text/40">
-          <div>Local Time: {new Date().toLocaleTimeString()}</div>
+          <div>Local Time: {localTime}</div>
           <div>Location: Planet Earth</div>
+          <div>You&apos;re the {visitorCount}th visitor</div>
           <div>© 2026 Akshat. All rights reserved.</div>
         </footer>
       </div>
