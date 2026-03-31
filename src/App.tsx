@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Github, Twitter, Mail, ExternalLink, ArrowDown, Code2, Cpu, Globe, Terminal, ArrowUpRight, Linkedin, Aperture, Database, Cloud, BrainCircuit, TestTube, Layers, Server } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 import LoadingScreen from "./components/LoadingScreen";
 import WebGLBackground from "./components/WebGLBackground";
 import CustomCursor from "./components/CustomCursor";
@@ -414,6 +415,7 @@ export default function App() {
           <div>© 2026 Akshat. All rights reserved.</div>
         </footer>
       </div>
+      <Analytics />
     </>
   );
 }
