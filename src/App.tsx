@@ -10,12 +10,49 @@ import Lenis from "lenis";
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [titleIndex, setTitleIndex] = useState(0);
+  const [isMobileExperience, setIsMobileExperience] = useState(false);
   const titles = ["Full Stack Developer", "ML Engineer"];
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+    );
+
+    const updateExperienceMode = () => {
+      setIsMobileExperience(mediaQuery.matches);
+    };
+
+    updateExperienceMode();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateExperienceMode);
+
+      return () => {
+        mediaQuery.removeEventListener("change", updateExperienceMode);
+      };
+    }
+
+    mediaQuery.addListener(updateExperienceMode);
+
+    return () => {
+      mediaQuery.removeListener(updateExperienceMode);
+    };
+  }, []);
 
   useEffect(() => {
     const titleInterval = setInterval(() => {
       setTitleIndex((prev) => (prev + 1) % titles.length);
     }, 3000);
+
+    return () => {
+      clearInterval(titleInterval);
+    };
+  }, [titles.length]);
+
+  useEffect(() => {
+    if (isMobileExperience) {
+      return;
+    }
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -36,10 +73,9 @@ export default function App() {
     requestAnimationFrame(raf);
 
     return () => {
-      clearInterval(titleInterval);
       lenis.destroy();
     };
-  }, []);
+  }, [isMobileExperience]);
 
   return (
     <>
@@ -49,7 +85,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <WebGLBackground />
+      <WebGLBackground mobileOptimized={isMobileExperience} />
       <div 
         className="min-h-screen selection:bg-accent selection:text-white grid-bg relative overflow-x-hidden"
         style={{ opacity: isLoading ? 0 : 1, transition: "opacity 0.5s ease-out" }}
@@ -78,7 +114,7 @@ export default function App() {
         </nav>
 
         {/* Hero Section */}
-        <section className="h-screen flex flex-col justify-center px-6 md:px-20 relative overflow-hidden">
+        <section className="h-screen flex flex-col justify-center px-4 sm:px-6 md:px-20 relative overflow-hidden">
           
           <motion.div
             initial="hidden"
@@ -115,7 +151,7 @@ export default function App() {
                 </motion.span>
               </AnimatePresence>
             </motion.h2>
-            <h1 className="text-6xl md:text-[10rem] font-display font-bold leading-[0.75] mb-8 flex flex-col items-center">
+            <h1 className="mb-8 flex w-full max-w-[92vw] flex-col items-center text-center font-display text-[clamp(3.4rem,15vw,5.8rem)] font-bold leading-[0.8] md:max-w-none md:text-[10rem] md:leading-[0.75]">
               <motion.span 
                 variants={{
                   hidden: { opacity: 0, y: 20 },
@@ -130,7 +166,7 @@ export default function App() {
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="font-artistic-serif italic lowercase text-5xl md:text-[8rem] text-[#E07A3E] my-[-0.25em] relative z-10"
+                className="relative z-10 my-[-0.15em] font-artistic-serif text-[clamp(2.75rem,12vw,4.5rem)] italic lowercase text-[#E07A3E] md:my-[-0.25em] md:text-[8rem]"
               >
                 and
               </motion.span>
@@ -139,7 +175,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.94em] md:text-[0.9em]"
+                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.88em] md:text-[0.9em]"
               >
                 DEDICATION
               </motion.span>
@@ -156,7 +192,7 @@ export default function App() {
           </motion.div>
         </section>
 
-        <TechStack />
+        <TechStack mobileOptimized={isMobileExperience} />
 
         {/* Quote Section */}
         <section className="py-40 relative flex justify-center items-center px-6 overflow-hidden">
@@ -343,7 +379,7 @@ function ProjectRow({ title, category, year, href }: { title: string, category: 
       className="group flex items-center justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
     >
       <div className="flex items-center gap-8">
-        <span className="text-text/20 font-accent-mono text-sm group-hover:text-accent transition-colors">{year}</span>
+        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent">{year}</span>
         <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
       </div>
       <div className="flex items-center gap-4">

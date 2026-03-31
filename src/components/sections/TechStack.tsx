@@ -130,10 +130,19 @@ const TECH_CATEGORIES: TechCategory[] = [
   },
 ];
 
-export default function TechStack() {
+interface TechStackProps {
+  mobileOptimized?: boolean;
+}
+
+export default function TechStack({ mobileOptimized = false }: TechStackProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (mobileOptimized) {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      return;
+    }
+
     const rows = sectionRef.current?.querySelectorAll(".tech-row");
     
     rows?.forEach((row) => {
@@ -174,7 +183,7 @@ export default function TechStack() {
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, []);
+  }, [mobileOptimized]);
 
   return (
     <section id="about" ref={sectionRef} className="py-32 px-6 md:px-20 border-t border-white/5 relative">

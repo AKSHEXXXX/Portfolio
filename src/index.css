@@ -81,3 +81,18 @@
 .glass {
   @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
 }
+
+@media (max-width: 767px) {
+  .hero-word {
+    letter-spacing: -0.045em;
+    transform: scaleX(0.88);
+  }
+
+  .noise-bg {
+    display: none;
+  }
+
+  .text-dotted {
+    background-size: 5px 5px;
+  }
+}

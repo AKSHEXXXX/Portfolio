@@ -86,20 +86,45 @@ const FRAGMENT_SHADER = `
   }
 `;
 
-const WebGLBackground: React.FC = () => {
+interface WebGLBackgroundProps {
+  mobileOptimized?: boolean;
+}
+
+const WebGLBackground: React.FC<WebGLBackgroundProps> = ({ mobileOptimized = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isSafari, setIsSafari] = useState(false);
+  const [useStaticBackground, setUseStaticBackground] = useState(mobileOptimized);
 
   useEffect(() => {
-    // Detect Safari for fallback
+    const mediaQuery = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
+    );
     const ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
-      setIsSafari(true);
+    const isSafari =
+      ua.indexOf("safari") !== -1 && ua.indexOf("chrome") === -1;
+
+    const updateMode = () => {
+      setUseStaticBackground(isSafari || mobileOptimized || mediaQuery.matches);
+    };
+
+    updateMode();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateMode);
+
+      return () => {
+        mediaQuery.removeEventListener("change", updateMode);
+      };
     }
-  }, []);
+
+    mediaQuery.addListener(updateMode);
+
+    return () => {
+      mediaQuery.removeListener(updateMode);
+    };
+  }, [mobileOptimized]);
 
   useEffect(() => {
-    if (isSafari || !canvasRef.current) return;
+    if (useStaticBackground || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const gl = canvas.getContext("webgl");
@@ -184,12 +209,10 @@ const WebGLBackground: React.FC = () => {
     let animationFrameId: number;
     let startTime = Date.now();
     let lastTime = 0;
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const targetFPS = isMobile ? 30 : 60;
-    const frameInterval = 1000 / targetFPS;
+    const frameInterval = 1000 / 60;
 
     const resize = () => {
-      const dpr = 0.75; // Downscale for performance
+      const dpr = Math.min(window.devicePixelRatio || 1, 1);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -242,13 +265,13 @@ const WebGLBackground: React.FC = () => {
       gl.deleteBuffer(buffer);
       gl.deleteTexture(texture);
     };
-  }, [isSafari]);
+  }, [useStaticBackground]);
 
-  if (isSafari) {
+  if (useStaticBackground) {
     return (
       <div 
-        className="fixed inset-0 -z-1 bg-gradient-to-br from-[#000000] via-[#4a1a05] to-[#E07A3E]"
-        style={{ pointerEvents: 'none' }}
+        className="fixed inset-0 -z-1 bg-[radial-gradient(circle_at_top,#6d2a10_0%,#130b08_38%,#050505_78%)]"
+        style={{ pointerEvents: "none" }}
       />
     );
   }
@@ -258,8 +281,8 @@ const WebGLBackground: React.FC = () => {
       ref={canvasRef}
       className="fixed inset-0 -z-1 w-full h-full bg-black"
       style={{ 
-        imageRendering: 'pixelated',
-        pointerEvents: 'none'
+        imageRendering: "pixelated",
+        pointerEvents: "none"
       }}
     />
   );
