@@ -114,7 +114,7 @@ export default function App() {
         </nav>
 
         {/* Hero Section */}
-        <section className="h-screen flex flex-col justify-center px-4 sm:px-6 md:px-20 relative overflow-hidden">
+        <section className="h-screen flex flex-col justify-center px-3 sm:px-6 md:px-20 relative overflow-hidden">
           
           <motion.div
             initial="hidden"
@@ -151,7 +151,7 @@ export default function App() {
                 </motion.span>
               </AnimatePresence>
             </motion.h2>
-            <h1 className="mb-8 flex w-full max-w-[92vw] flex-col items-center text-center font-display text-[clamp(3.4rem,15vw,5.8rem)] font-bold leading-[0.8] md:max-w-none md:text-[10rem] md:leading-[0.75]">
+            <h1 className="mb-8 flex w-full max-w-[94vw] flex-col items-center text-center font-display text-[clamp(2.45rem,11.5vw,4.8rem)] font-bold leading-[0.82] md:max-w-none md:text-[10rem] md:leading-[0.75]">
               <motion.span 
                 variants={{
                   hidden: { opacity: 0, y: 20 },
@@ -166,7 +166,7 @@ export default function App() {
                   hidden: { opacity: 0, scale: 0.8 },
                   visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="relative z-10 my-[-0.15em] font-artistic-serif text-[clamp(2.75rem,12vw,4.5rem)] italic lowercase text-[#E07A3E] md:my-[-0.25em] md:text-[8rem]"
+                className="relative z-10 my-[-0.12em] font-artistic-serif text-[clamp(1.85rem,8vw,3.8rem)] italic lowercase text-[#E07A3E] md:my-[-0.25em] md:text-[8rem]"
               >
                 and
               </motion.span>
@@ -175,7 +175,7 @@ export default function App() {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
                 }} 
-                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.88em] md:text-[0.9em]"
+                className="hero-word hero-word-secondary inline-block uppercase text-dotted text-[0.84em] md:text-[0.9em]"
               >
                 DEDICATION
               </motion.span>

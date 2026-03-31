@@ -92,39 +92,17 @@ interface WebGLBackgroundProps {
 
 const WebGLBackground: React.FC<WebGLBackgroundProps> = ({ mobileOptimized = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [useStaticBackground, setUseStaticBackground] = useState(mobileOptimized);
+  const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)"
-    );
     const ua = navigator.userAgent.toLowerCase();
-    const isSafari =
-      ua.indexOf("safari") !== -1 && ua.indexOf("chrome") === -1;
-
-    const updateMode = () => {
-      setUseStaticBackground(isSafari || mobileOptimized || mediaQuery.matches);
-    };
-
-    updateMode();
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", updateMode);
-
-      return () => {
-        mediaQuery.removeEventListener("change", updateMode);
-      };
+    if (ua.indexOf("safari") !== -1 && ua.indexOf("chrome") === -1) {
+      setIsSafari(true);
     }
-
-    mediaQuery.addListener(updateMode);
-
-    return () => {
-      mediaQuery.removeListener(updateMode);
-    };
-  }, [mobileOptimized]);
+  }, []);
 
   useEffect(() => {
-    if (useStaticBackground || !canvasRef.current) return;
+    if (isSafari || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const gl = canvas.getContext("webgl");
@@ -209,10 +187,11 @@ const WebGLBackground: React.FC<WebGLBackgroundProps> = ({ mobileOptimized = fal
     let animationFrameId: number;
     let startTime = Date.now();
     let lastTime = 0;
-    const frameInterval = 1000 / 60;
+    const targetFPS = mobileOptimized ? 28 : 60;
+    const frameInterval = 1000 / targetFPS;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1);
+      const dpr = mobileOptimized ? 0.6 : Math.min(window.devicePixelRatio || 1, 1);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -265,9 +244,9 @@ const WebGLBackground: React.FC<WebGLBackgroundProps> = ({ mobileOptimized = fal
       gl.deleteBuffer(buffer);
       gl.deleteTexture(texture);
     };
-  }, [useStaticBackground]);
+  }, [isSafari, mobileOptimized]);
 
-  if (useStaticBackground) {
+  if (isSafari) {
     return (
       <div 
         className="fixed inset-0 -z-1 bg-[radial-gradient(circle_at_top,#6d2a10_0%,#130b08_38%,#050505_78%)]"

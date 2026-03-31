@@ -57,20 +57,18 @@ const TECH_CATEGORIES: TechCategory[] = [
   {
     title: "languages",
     items: [
-      { name: "Java 21", icon: <Cpu size={22} /> },
-      { name: "Python 3.x", icon: <Binary size={22} /> },
-      { name: "SQL", icon: <Database size={22} /> },
-      { name: "Bash", icon: <Terminal size={22} /> },
+      { name: "Java", icon: <Cpu size={22} /> },
+      { name: "Python", icon: <Binary size={22} /> },
+      { name: "JavaScript", icon: <Code2 size={22} /> },
     ],
   },
   {
     title: "frameworks",
     items: [
-      { name: "Spring Boot 3", icon: <Zap size={22} /> },
-      { name: "Spring Security", icon: <ShieldCheck size={22} /> },
-      { name: "PyTorch", icon: <BrainCircuit size={22} /> },
-      { name: "Scikit-learn", icon: <Workflow size={22} /> },
-      { name: "Pandas", icon: <Box size={22} /> },
+      { name: "Spring Boot", icon: <Zap size={22} /> },
+      { name: "React JS", icon: <Layers size={22} /> },
+      { name: "Nest JS", icon: <Server size={22} /> },
+      { name: "Flask", icon: <Box size={22} /> },
     ],
   },
   {
@@ -84,11 +82,11 @@ const TECH_CATEGORIES: TechCategory[] = [
     ],
   },
   {
-    title: "databases & cache",
+    title: "databases",
     items: [
-      { name: "PostgreSQL", icon: <Database size={22} /> },
-      { name: "Redis (Distributed Caching)", icon: <Zap size={22} /> },
-      { name: "SQL Optimization", icon: <Code2 size={22} /> },
+      { name: "SQL", icon: <Database size={22} /> },
+      { name: "MongoDB", icon: <Database size={22} /> },
+      { name: "Postgre", icon: <Database size={22} /> },
     ],
   },
   {
@@ -99,16 +97,20 @@ const TECH_CATEGORIES: TechCategory[] = [
       { name: "Linux", icon: <LinuxSolidIcon /> },
       { name: "WSL", icon: <LinuxSolidIcon /> },
       { name: "GitHub Actions (CI/CD)", icon: <Workflow size={22} /> },
+      { name: "Kubernetes", icon: <Cloud size={22} /> },
       { name: "AWS (EC2/S3)", icon: <Cloud size={22} /> },
     ],
   },
   {
-    title: "ai & machine learning",
+    title: "ai",
     items: [
+      { name: "LangChain", icon: <BrainCircuit size={22} /> },
+      { name: "LangSmith", icon: <Workflow size={22} /> },
+      { name: "LangGraph", icon: <GitBranch size={22} /> },
+      { name: "RAG", icon: <Layers size={22} /> },
+      { name: "Pinecone", icon: <Database size={22} /> },
+      { name: "n8n", icon: <Workflow size={22} /> },
       { name: "PyTorch", icon: <BrainCircuit size={22} /> },
-      { name: "LSTM", icon: <Workflow size={22} /> },
-      { name: "Random Forest", icon: <Binary size={22} /> },
-      { name: "Feature Engineering", icon: <Code2 size={22} /> },
     ],
   },
   {

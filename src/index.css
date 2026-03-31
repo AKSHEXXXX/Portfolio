@@ -84,8 +84,8 @@
 
 @media (max-width: 767px) {
   .hero-word {
-    letter-spacing: -0.045em;
-    transform: scaleX(0.88);
+    letter-spacing: -0.03em;
+    transform: scaleX(0.82);
   }
 
   .noise-bg {
