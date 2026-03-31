@@ -94,18 +94,18 @@ export default function App() {
         <div className="noise-bg" />
 
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center mix-blend-difference">
+        <nav className="fixed top-0 left-0 z-50 flex w-full items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 md:px-10 mix-blend-difference">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-xl font-display font-bold tracking-tighter"
+            className="shrink-0 pr-4 text-lg font-display font-bold tracking-tighter sm:pr-8 sm:text-xl md:pr-12"
           >
             AKSHAT<span className="text-accent">.</span>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex gap-8 text-sm font-mono uppercase tracking-widest"
+            className="ml-auto flex gap-4 text-xs font-mono uppercase tracking-[0.28em] sm:gap-7 sm:text-sm sm:tracking-widest"
           >
             <a href="#about" className="hover:text-accent transition-colors">About</a>
             <a href="#projects" className="hover:text-accent transition-colors">Work</a>
