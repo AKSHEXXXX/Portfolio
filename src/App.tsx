@@ -333,7 +333,7 @@ export default function App() {
               href="https://github.com/AKSHEXXXX/Vaultflow" 
             />
             <ProjectRow 
-              title="Polari sense" 
+              title="Polari Sense" 
               category="Deep Learning" 
               year="2024" 
               href="https://github.com/AKSHEXXXX/pitting-onset-prediction" 
