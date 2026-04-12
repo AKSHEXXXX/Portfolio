@@ -320,7 +320,7 @@ export default function App() {
               <span className="text-accent font-accent-mono text-xs mb-4 block tracking-widest uppercase">02 // Selected Work</span>
               <h2 className="text-4xl md:text-7xl font-display font-bold">MY PROJECTS</h2>
             </div>
-            <div className="hidden md:block text-text/40 font-mono text-sm">
+            <div className="hidden md:block text-text/80 font-mono text-sm">
               (EXPLORE ALL)
             </div>
           </div>
@@ -333,10 +333,16 @@ export default function App() {
               href="https://github.com/AKSHEXXXX/Vaultflow" 
             />
             <ProjectRow 
-              title="Pitting Onset" 
+              title="Polari sense" 
               category="Deep Learning" 
               year="2024" 
               href="https://github.com/AKSHEXXXX/pitting-onset-prediction" 
+            />
+            <ProjectRow 
+              title="Coldchain" 
+              category="Logistics Optimization" 
+              year="2024" 
+              href="https://github.com/AKSHEXXXX/UPS" 
             />
           </div>
         </section>
@@ -349,7 +355,7 @@ export default function App() {
                 initial={{ y: "100%" }}
                 whileInView={{ y: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="font-accent-mono text-xs mb-8 block tracking-[0.5em] uppercase opacity-40"
+                className="font-accent-mono text-xs mb-8 block tracking-[0.5em] uppercase opacity-80"
               >
                 03 // Initiate Contact
               </motion.span>
@@ -428,11 +434,11 @@ function ProjectRow({ title, category, year, href }: { title: string, category: 
       className="group flex items-center justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
     >
       <div className="flex items-center gap-8">
-        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent">{year}</span>
+        <span className="font-accent-mono text-sm text-white/90 transition-colors group-hover:text-accent">{year}</span>
         <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-xs font-accent-mono uppercase tracking-widest text-text/40 group-hover:text-text transition-colors">{category}</span>
+        <span className="text-xs font-accent-mono uppercase tracking-widest text-text/80 group-hover:text-text transition-colors">{category}</span>
         <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-opacity text-accent" />
       </div>
     </motion.a>
@@ -464,7 +470,7 @@ function MarqueeRow({ label, meta, href, icon }: { label: string, meta: string, 
           {label}
         </h3>
         <div className="flex items-center gap-4 md:gap-8">
-          <span className="text-[10px] md:text-sm font-mono uppercase tracking-[0.2em] opacity-40">
+          <span className="text-[10px] md:text-sm font-mono uppercase tracking-[0.2em] opacity-80 text-white">
             {meta}
           </span>
           <ArrowUpRight size={24} className="opacity-40" />
