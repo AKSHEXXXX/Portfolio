@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Github, Twitter, Mail, ExternalLink, ArrowDown, Code2, Cpu, Globe, Terminal, ArrowUpRight, Linkedin, Aperture, Database, Cloud, BrainCircuit, TestTube, Layers, Server } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 import LoadingScreen from "./components/LoadingScreen";
 import WebGLBackground from "./components/WebGLBackground";
 import CustomCursor from "./components/CustomCursor";
@@ -420,6 +421,7 @@ export default function App() {
           <div>© 2026 Akshat. All rights reserved.</div>
         </footer>
       </div>
+      <Analytics />
     </>
   );
 }
@@ -434,7 +436,7 @@ function ProjectRow({ title, category, year, href }: { title: string, category: 
       className="group flex items-center justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
     >
       <div className="flex items-center gap-8">
-        <span className="font-accent-mono text-sm text-white/90 transition-colors group-hover:text-accent">{year}</span>
+        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent">{year}</span>
         <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
       </div>
       <div className="flex items-center gap-4">
