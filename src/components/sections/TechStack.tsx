@@ -331,7 +331,7 @@ export default function TechStack({ mobileOptimized = false }: TechStackProps) {
     <section id="about" ref={sectionRef} className="py-32 px-6 md:px-20 border-t border-white/5 relative">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24">
-          <span className="text-white/40 font-accent-mono text-xs mb-4 block tracking-[0.3em] uppercase">
+          <span className="text-white/80 font-accent-mono text-xs mb-4 block tracking-[0.3em] uppercase">
             01 // Technical Arsenal
           </span>
           <h2 className="text-4xl sm:text-5xl md:text-8xl font-display font-bold mb-8 tracking-tighter">
