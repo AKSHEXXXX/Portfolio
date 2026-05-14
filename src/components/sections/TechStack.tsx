@@ -194,6 +194,18 @@ interface TechCategory {
 
 const TECH_CATEGORIES: TechCategory[] = [
   {
+    title: "ai",
+    items: [
+      { name: "LangChain", icon: <LangChainIcon /> },
+      { name: "LangSmith", icon: <LangSmithIcon /> },
+      { name: "LangGraph", icon: <LangGraphIcon /> },
+      { name: "RAG", icon: <RagIcon /> },
+      { name: "Pinecone", icon: <PineconeIcon /> },
+      { name: "n8n", icon: <N8NIcon /> },
+      { name: "PyTorch", icon: <PyTorchIcon /> },
+    ],
+  },
+  {
     title: "languages",
     items: [
       { name: "Java", icon: <JavaIcon /> },
@@ -239,18 +251,6 @@ const TECH_CATEGORIES: TechCategory[] = [
       { name: "GitHub Actions (CI/CD)", icon: <Workflow size={22} /> },
       { name: "Kubernetes", icon: <KubernetesIcon /> },
       { name: "AWS (EC2/S3)", icon: <Cloud size={22} /> },
-    ],
-  },
-  {
-    title: "ai",
-    items: [
-      { name: "LangChain", icon: <LangChainIcon /> },
-      { name: "LangSmith", icon: <LangSmithIcon /> },
-      { name: "LangGraph", icon: <LangGraphIcon /> },
-      { name: "RAG", icon: <RagIcon /> },
-      { name: "Pinecone", icon: <PineconeIcon /> },
-      { name: "n8n", icon: <N8NIcon /> },
-      { name: "PyTorch", icon: <PyTorchIcon /> },
     ],
   },
   {
@@ -353,7 +353,7 @@ export default function TechStack({ mobileOptimized = false }: TechStackProps) {
               
               {/* Category Title */}
               <div className="w-full md:w-1/3 mb-6 md:mb-0 z-10">
-                <h3 className="category-title text-2xl md:text-3xl font-artistic-serif italic lowercase text-[#E07A3E] opacity-70 transition-all duration-500">
+                <h3 className="category-title text-2xl md:text-3xl font-artistic-serif italic lowercase text-[#F5E6D3] opacity-80 transition-all duration-500">
                   {category.title}
                 </h3>
               </div>
@@ -366,7 +366,7 @@ export default function TechStack({ mobileOptimized = false }: TechStackProps) {
                     className="tech-item flex items-center gap-3 px-2 py-1 transition-all duration-300 hover:scale-110"
                   >
                     <span className="text-white">
-                      {item.icon || <Brackets size={20} />}
+                      {item.icon}
                     </span>
                     <span className="text-base md:text-lg font-display font-bold uppercase tracking-wider text-white">
                       {item.name}
