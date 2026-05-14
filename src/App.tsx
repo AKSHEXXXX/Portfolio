@@ -29,6 +29,8 @@ export default function App() {
     formatLocalTimestamp(new Date(), performance.now())
   );
   const [visitorCount, setVisitorCount] = useState(199);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const titles = ["Full Stack Developer", "ML Engineer"];
 
   useEffect(() => {
@@ -120,6 +122,27 @@ export default function App() {
     setVisitorCount(nextCount);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const sectionIds = ["about", "projects", "contact"];
+    const observers = sectionIds.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { threshold: 0.25 }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((obs) => obs?.disconnect());
+  }, []);
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -137,22 +160,37 @@ export default function App() {
         <div className="noise-bg" />
 
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 z-50 flex w-full items-center gap-6 px-4 py-6 sm:gap-8 sm:px-6 md:px-10 mix-blend-difference">
+        <nav className={`fixed top-0 left-0 z-50 flex w-full items-center gap-6 px-4 sm:gap-8 sm:px-6 md:px-10 transition-all duration-500 ${scrolled ? "py-4 backdrop-blur-md bg-black/50 border-b border-white/5" : "py-6"}`}>
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="shrink-0 pr-4 text-lg font-display font-bold tracking-tighter sm:pr-8 sm:text-xl md:pr-12"
+            className="flex items-center gap-3 shrink-0 pr-4 text-lg font-display font-bold tracking-tighter sm:pr-8 sm:text-xl md:pr-12"
           >
-            AKSHAT<span className="text-accent">.</span>
+            <img src="/favicon.svg" alt="Logo" className="w-6 h-6" />
+            <span>AKSHAT<span className="text-[#E07A3E]">.</span></span>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="ml-auto flex gap-4 text-xs font-mono uppercase tracking-[0.28em] sm:gap-7 sm:text-sm sm:tracking-widest"
+            className="ml-auto flex gap-6 text-xs font-mono uppercase tracking-[0.28em] sm:gap-8 sm:text-sm sm:tracking-widest"
           >
-            <a href="#about" className="hover:text-accent transition-colors">About</a>
-            <a href="#projects" className="hover:text-accent transition-colors">Work</a>
-            <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+            {[{ id: "about", label: "About" }, { id: "projects", label: "Work" }, { id: "contact", label: "Contact" }].map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={`relative pb-1 transition-colors duration-300 ${
+                  activeSection === id ? "text-[#E07A3E]" : "text-white/60 hover:text-white"
+                }`}
+              >
+                {label}
+                {activeSection === id && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#E07A3E]"
+                  />
+                )}
+              </a>
+            ))}
           </motion.div>
         </nav>
 
@@ -223,6 +261,38 @@ export default function App() {
                 DEDICATION
               </motion.span>
             </h1>
+
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+              }}
+              className="mt-8 text-xs md:text-sm font-accent-mono text-white/45 tracking-[0.22em] uppercase text-center max-w-xl px-4"
+            >
+              Building Intelligent Autonomous Systems and Pipelines
+            </motion.p>
+
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+              }}
+              className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center"
+            >
+              <a
+                href="#projects"
+                className="group inline-flex items-center gap-2 bg-white text-black px-7 py-3.5 font-accent-mono text-xs uppercase tracking-[0.2em] hover:bg-white/90 transition-all duration-300 rounded-full"
+              >
+                View Work <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+              <a
+                href="/Akshat_Saxena_Resume.pdf"
+                download="Akshat_Saxena_Resume.pdf"
+                className="group inline-flex items-center gap-2 border border-white/20 hover:border-[#E07A3E]/60 px-7 py-3.5 font-accent-mono text-xs uppercase tracking-[0.2em] text-white/60 hover:text-[#FFD3BA] transition-all duration-300 rounded-full hover:bg-[#E07A3E]/10"
+              >
+                Get Résumé <ArrowDown size={14} className="text-[#E07A3E] group-hover:translate-y-0.5 transition-transform" />
+              </a>
+            </motion.div>
           </motion.div>
 
           <motion.div 
@@ -321,29 +391,46 @@ export default function App() {
               <span className="text-accent font-accent-mono text-xs mb-4 block tracking-widest uppercase">02 // Selected Work</span>
               <h2 className="text-4xl md:text-7xl font-display font-bold">MY PROJECTS</h2>
             </div>
-            <div className="hidden md:block text-text/80 font-mono text-sm">
+            <a
+              href="https://github.com/AKSHEXXXX?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-2 text-text/80 font-mono text-sm hover:text-accent transition-colors group"
+            >
               (EXPLORE ALL)
-            </div>
+              <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity text-accent" />
+            </a>
           </div>
 
           <div className="grid gap-1">
             <ProjectRow 
+              title="MetaGuard" 
+              category="Agentic Dev Tooling" 
+              year="2025" 
+              href="https://github.com/AKSHEXXXX/MetaGuard" 
+              tag="AI"
+              description="Agentic CI pipeline using GitHub Actions + OpenMetadata MCP for automated data lineage governance"
+            />
+            <ProjectRow 
               title="Vaultflow" 
               category="SaaS" 
               year="2024" 
-              href="https://github.com/AKSHEXXXX/Vaultflow" 
+              href="https://github.com/AKSHEXXXX/Vaultflow"
+              description="Multi-tenant SaaS platform with real-time financial analytics and role-based access control"
             />
             <ProjectRow 
               title="Polari Sense" 
               category="Deep Learning" 
               year="2024" 
-              href="https://github.com/AKSHEXXXX/pitting-onset-prediction" 
+              href="https://github.com/AKSHEXXXX/pitting-onset-prediction"
+              description="Deep learning model predicting bearing pitting onset from vibration signals with 91%+ accuracy"
             />
             <ProjectRow 
               title="Coldchain" 
               category="Logistics Optimization" 
               year="2024" 
-              href="https://github.com/AKSHEXXXX/UPS" 
+              href="https://github.com/AKSHEXXXX/UPS"
+              description="Route optimization engine for temperature-sensitive logistics using constraint-based graph algorithms"
             />
           </div>
         </section>
@@ -370,6 +457,21 @@ export default function App() {
                   LET'S WORK<br />TOGETHER
                 </motion.h2>
               </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                className="mt-10"
+              >
+                <a
+                  href="/Akshat_Saxena_Resume.pdf"
+                  download="Akshat_Saxena_Resume.pdf"
+                  className="group inline-flex items-center gap-3 border border-[#E07A3E]/60 bg-[#E07A3E]/10 hover:bg-[#E07A3E]/20 px-7 py-4 rounded-full transition-all duration-300 hover:border-[#E07A3E] hover:shadow-[0_0_30px_rgba(224,122,62,0.25)] backdrop-blur-sm"
+                >
+                  <span className="font-accent-mono text-sm uppercase tracking-[0.25em] text-[#FFD3BA]">Get Résumé</span>
+                  <ArrowDown size={16} className="text-[#E07A3E] group-hover:translate-y-0.5 transition-transform" />
+                </a>
+              </motion.div>
             </div>
             
             <div className="flex flex-col relative">
@@ -417,8 +519,17 @@ export default function App() {
         {/* Footer */}
         <footer className="p-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-mono uppercase tracking-widest text-text/40">
           <div>Local Time: {localTime}</div>
-          <div>Location: Planet Earth</div>
-          <div>© 2026 Akshat. All rights reserved.</div>
+          <div>Dubai, UAE</div>
+          <div className="flex items-center gap-6">
+            <span>© 2026 Akshat. All rights reserved.</span>
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+              className="hover:text-text/70 transition-colors flex items-center gap-1"
+            >
+              ↑ Top
+            </a>
+          </div>
         </footer>
       </div>
       <Analytics />
@@ -426,21 +537,33 @@ export default function App() {
   );
 }
 
-function ProjectRow({ title, category, year, href }: { title: string, category: string, year: string, href: string }) {
+function ProjectRow({ title, category, year, href, tag, description }: { title: string, category: string, year: string, href: string, tag?: string, description?: string }) {
   return (
     <motion.a 
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-      className="group flex items-center justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
+      className="group flex items-start justify-between py-8 border-b border-white/5 cursor-pointer transition-colors px-4 block"
     >
-      <div className="flex items-center gap-8">
-        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent">{year}</span>
-        <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
+      <div className="flex items-start gap-6 md:gap-8">
+        <span className="font-accent-mono text-sm text-white/60 transition-colors group-hover:text-accent shrink-0 pt-1">{year}</span>
+        <div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <h3 className="text-2xl md:text-4xl font-display font-bold group-hover:translate-x-2 transition-transform">{title}</h3>
+            {tag && (
+              <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-accent-mono uppercase tracking-widest border border-[#E07A3E]/50 text-[#E07A3E] bg-[#E07A3E]/10">
+                {tag}
+              </span>
+            )}
+          </div>
+          {description && (
+            <p className="text-xs md:text-sm font-mono text-white/35 mt-2 group-hover:text-white/55 transition-colors max-w-2xl leading-relaxed">{description}</p>
+          )}
+        </div>
       </div>
-      <div className="flex items-center gap-4">
-        <span className="text-xs font-accent-mono uppercase tracking-widest text-text/80 group-hover:text-text transition-colors">{category}</span>
+      <div className="flex items-center gap-4 shrink-0 pt-1">
+        <span className="hidden md:block text-xs font-accent-mono uppercase tracking-widest text-text/80 group-hover:text-text transition-colors">{category}</span>
         <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-opacity text-accent" />
       </div>
     </motion.a>
